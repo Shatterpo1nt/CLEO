@@ -45,10 +45,12 @@ create table if not exists public.keys (
     id          uuid        primary key default gen_random_uuid(),
     user_id     uuid        not null references public.users (id) on delete cascade,
     name        text        not null,
+    -- key_hash stores the SHA-256 hex digest of the raw key value
     key_hash    text        not null unique,
     is_active   boolean     not null default true,
     expires_at  timestamptz,
-    created_at  timestamptz not null default now()
+    created_at  timestamptz not null default now(),
+    updated_at  timestamptz not null default now()
 );
 
 alter table public.keys enable row level security;
@@ -68,8 +70,8 @@ create policy "keys: select own keys"
 create table if not exists public.key_locations (
     id          uuid        primary key default gen_random_uuid(),
     key_id      uuid        not null references public.keys (id) on delete cascade,
-    latitude    numeric(10, 7) not null,
-    longitude   numeric(10, 7) not null,
+    latitude    numeric(9, 6)  not null,   -- valid range: -90.000000 to +90.000000
+    longitude   numeric(10, 7) not null,   -- valid range: -180.0000000 to +180.0000000
     recorded_at timestamptz not null default now()
 );
 
