@@ -17,7 +17,10 @@ create table if not exists public.users (
     full_name   text,
     avatar_url  text,
     created_at  timestamptz not null default now(),
-    updated_at  timestamptz not null default now()
+    updated_at  timestamptz not null default now(),
+    subscription_status   text        not null default 'trial',
+    subscription_type     text,
+    stripe_customer_id    text
 );
 
 alter table public.users enable row level security;
@@ -50,7 +53,9 @@ create table if not exists public.keys (
     is_active   boolean     not null default true,
     expires_at  timestamptz,
     created_at  timestamptz not null default now(),
-    updated_at  timestamptz not null default now()
+    updated_at  timestamptz not null default now(),
+    code_anonyme  text        not null unique,
+    statut        text        not null default 'en_depot'
 );
 
 alter table public.keys enable row level security;
@@ -68,11 +73,10 @@ create policy "keys: select own keys"
 -- Client access is entirely prohibited; service role only.
 -- ============================================================
 create table if not exists public.key_locations (
-    id          uuid        primary key default gen_random_uuid(),
-    key_id      uuid        not null references public.keys (id) on delete cascade,
-    latitude    numeric(9, 6)  not null,   -- valid range: -90.000000 to +90.000000
-    longitude   numeric(10, 7) not null,   -- valid range: -180.0000000 to +180.0000000
-    recorded_at timestamptz not null default now()
+    id           uuid        primary key default gen_random_uuid(),
+    key_id       uuid        not null references public.keys (id) on delete cascade,
+    emplacement  text        not null,
+    recorded_at  timestamptz not null default now()
 );
 
 alter table public.key_locations enable row level security;
@@ -93,7 +97,10 @@ create table if not exists public.requests (
                             check (status in ('pending', 'approved', 'denied')),
     notes       text,
     created_at  timestamptz not null default now(),
-    updated_at  timestamptz not null default now()
+    updated_at  timestamptz not null default now(),
+    type                text        not null,
+    adresse_livraison   bytea,
+    completed_at        timestamptz
 );
 
 alter table public.requests enable row level security;
