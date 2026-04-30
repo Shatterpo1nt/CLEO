@@ -32,3 +32,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Scripts setup locaux (contiennent des clés)
+*.command
+.env.netlify
+set-env-now.command
