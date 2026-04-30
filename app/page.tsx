@@ -222,10 +222,11 @@ export default function Home() {
       <footer className="bg-sand py-10 text-center text-muted text-sm">
         <p>© {new Date().getFullYear()} Cléo — Paris</p>
         <p className="mt-1">
-          <a href="mailto:contact@merci-cleo.fr" className="hover:text-navy transition-colors">
-            contact@merci-cleo.fr
+          <a href="mailto:bonjour@merci-cleo.fr" className="hover:text-navy transition-colors">
+            bonjour@merci-cleo.fr
           </a>
         </p>
+        <p className="mt-1">09 72 11 05 64</p>
       </footer>
 
     </main>
