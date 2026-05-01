@@ -12,13 +12,14 @@ export function createClient() {
         getAll() {
           return cookieStore.getAll()
         },
-        setAll(cookiesToSet) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setAll(cookiesToSet: { name: string; value: string; options: any }[]) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             )
           } catch {
-            // setAll appelé depuis un Server Component — ignoré
+            // Server Component context — ignoré
           }
         },
       },
@@ -26,7 +27,6 @@ export function createClient() {
   )
 }
 
-// Client admin avec service role key (uniquement côté serveur, jamais exposé)
 export function createAdminClient() {
   const cookieStore = cookies()
 
@@ -38,7 +38,8 @@ export function createAdminClient() {
         getAll() {
           return cookieStore.getAll()
         },
-        setAll(cookiesToSet) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setAll(cookiesToSet: { name: string; value: string; options: any }[]) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
