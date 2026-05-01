@@ -51,7 +51,7 @@ export default function LoginPage() {
         ) : (
           <>
             <h1 className="text-navy font-bold text-2xl mb-1">Connexion</h1>
-            <p className="text-muted text-sm mb-6">On t'envoie un lien magique par email.</p>
+            <p className="text-muted text-sm mb-6">On t&apos;envoie un lien magique par email.</p>
 
             <form onSubmit={handleLogin} className="space-y-4">
               <div>

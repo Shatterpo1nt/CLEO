@@ -152,7 +152,7 @@ export default function Home() {
         </h2>
         <p className="text-muted text-center mb-12 max-w-lg mx-auto">
           Vous pouvez retirer votre clé et résilier à tout moment. Le premier mois est
-          offert pour vous laisser le temps d'essayer en toute simplicité.
+          offert pour vous laisser le temps d&apos;essayer en toute simplicité.
         </p>
 
         <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">

@@ -97,7 +97,7 @@ export default async function DashboardPage({
             </ul>
           ) : (
             <p className="text-muted text-sm">
-              Aucune clé déposée pour l'instant.
+              Aucune clé déposée pour l&apos;instant.
               {isActive ? ' Contacte-nous pour organiser le dépôt.' : ' Active ton abonnement pour commencer.'}
             </p>
           )}
