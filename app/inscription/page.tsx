@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 
-export default function InscriptionPage() {
+function InscriptionForm() {
   const searchParams = useSearchParams()
   const plan = (searchParams.get('plan') ?? 'monthly') as 'monthly' | 'annual'
   const reprise = searchParams.get('reprise') === 'true'
@@ -266,5 +266,17 @@ export default function InscriptionPage() {
         </form>
       </div>
     </main>
+  )
+}
+
+export default function InscriptionPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-cream flex items-center justify-center font-sans">
+        <p className="text-muted text-sm">Chargement…</p>
+      </main>
+    }>
+      <InscriptionForm />
+    </Suspense>
   )
 }
