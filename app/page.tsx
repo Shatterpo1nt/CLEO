@@ -47,28 +47,9 @@ export default function Home() {
   const router = useRouter()
   const [loading, setLoading] = useState<'monthly' | 'annual' | null>(null)
 
-  async function handleCheckout(plan: 'monthly' | 'annual') {
+  function handleCheckout(plan: 'monthly' | 'annual') {
     setLoading(plan)
-    try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan }),
-      })
-      const data = await res.json()
-
-      if (data.url) {
-        window.location.href = data.url
-      } else if (res.status === 401) {
-        router.push('/login')
-      } else {
-        alert('Une erreur est survenue. Réessaie.')
-      }
-    } catch {
-      alert('Une erreur est survenue. Réessaie.')
-    } finally {
-      setLoading(null)
-    }
+    router.push(`/inscription?plan=${plan}`)
   }
 
   return (

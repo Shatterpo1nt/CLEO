@@ -37,3 +37,10 @@ next-env.d.ts
 *.command
 .env.netlify
 set-env-now.command
+
+# Fichiers secrets — ne pas committer
+.env.netlify-import
+.stripe-test-values.txt
+.env.local
+.env.netlify
+*.command

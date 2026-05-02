@@ -2,10 +2,8 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -21,11 +19,16 @@ export default function LoginPage() {
       email,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
+        shouldCreateUser: false,
       },
     })
 
     if (error) {
-      setError(error.message)
+      if (error.message.toLowerCase().includes('not found') || error.status === 422) {
+        setError("Aucun compte n'est associé à cette adresse. Vous pouvez souscrire depuis la page d'accueil.")
+      } else {
+        setError('Une erreur est survenue. Veuillez réessayer.')
+      }
     } else {
       setSent(true)
     }
@@ -33,7 +36,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-cream flex flex-col items-center justify-center px-6">
+    <main className="min-h-screen bg-cream flex flex-col items-center justify-center px-6 font-sans">
       <a href="/" className="text-navy font-semibold text-xl tracking-tight mb-10">
         Cléo
       </a>
@@ -42,44 +45,55 @@ export default function LoginPage() {
         {sent ? (
           <div className="text-center">
             <div className="text-4xl mb-4">📬</div>
-            <h2 className="text-navy font-semibold text-lg mb-2">Vérifie tes emails</h2>
-            <p className="text-muted text-sm">
+            <h2 className="text-navy font-semibold text-lg mb-2">Vérifiez votre adresse email</h2>
+            <p className="text-muted text-sm leading-relaxed">
               Un lien de connexion a été envoyé à <strong>{email}</strong>.
-              Clique dessus pour accéder à ton espace.
+              Cliquez dessus pour accéder à votre espace Cléo.
             </p>
+            <button
+              onClick={() => { setSent(false); setEmail('') }}
+              className="mt-6 text-muted text-xs underline hover:text-navy transition-colors"
+            >
+              Utiliser une autre adresse
+            </button>
           </div>
         ) : (
           <>
-            <h1 className="text-navy font-bold text-2xl mb-1">Connexion</h1>
-            <p className="text-muted text-sm mb-6">On t&apos;envoie un lien magique par email.</p>
+            <h1 className="text-navy font-semibold text-lg mb-1">Accédez à votre espace Cléo</h1>
+            <p className="text-muted text-sm mb-6">
+              Entrez votre adresse email pour recevoir votre lien de connexion.
+            </p>
 
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label className="block text-navy text-sm font-medium mb-1">
-                  Email
-                </label>
+                <label className="text-navy text-sm font-medium block mb-1.5">Adresse email</label>
                 <input
-                  type="email"
                   required
+                  type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="toi@exemple.fr"
-                  className="w-full bg-cream border border-sand rounded-xl px-4 py-3 text-navy text-sm placeholder-muted/50 focus:outline-none focus:border-steel transition-colors"
+                  placeholder="votre@email.fr"
+                  className="w-full bg-cream border border-muted/20 rounded-xl px-4 py-3 text-navy text-sm focus:outline-none focus:border-navy transition-colors"
                 />
               </div>
 
               {error && (
-                <p className="text-red-500 text-xs">{error}</p>
+                <p className="text-red-600 text-xs leading-relaxed">{error}</p>
               )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-navy text-cream py-3 rounded-pill text-sm font-medium hover:bg-steel transition-colors disabled:opacity-60"
+                className="w-full bg-navy text-cream py-3 rounded-full font-medium text-sm hover:bg-steel transition-colors disabled:opacity-60"
               >
-                {loading ? 'Envoi...' : 'Recevoir le lien'}
+                {loading ? 'Envoi…' : 'Recevoir le lien'}
               </button>
             </form>
+
+            <p className="text-center text-muted text-xs mt-5">
+              Pas encore client ?{' '}
+              <a href="/#pricing" className="text-navy underline">Découvrir Cléo</a>
+            </p>
           </>
         )}
       </div>
